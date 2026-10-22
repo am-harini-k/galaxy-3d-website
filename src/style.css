@@ -1,0 +1,270 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    overflow: hidden;
+    background: #000005;
+}
+
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+    touch-action: none;
+}
+
+.solar-title
+{
+    position: fixed;
+    top: 8vh;
+    left: 50%;
+    color: #fff0c2;
+    font: 600 0.75rem Georgia, serif;
+    letter-spacing: 0.35em;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -12px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.solar-system-active .solar-title
+{
+    opacity: 0.9;
+    transform: translate(-50%, 0);
+}
+
+.is-travelling
+{
+    cursor: wait;
+}
+
+/* Main content spacing */
+.pi-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pi-section h3 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #ffffff;
+}
+
+.pi-section h4 {
+    margin: 8px 0 2px;
+    font-size: 1rem;
+    color: #a8c7ff;
+    letter-spacing: 0.3px;
+}
+
+.pi-section p {
+    line-height: 1.75;
+    margin: 0;
+}
+
+.pi-sub,
+.pi-note {
+    color: #a8b2c5;
+    font-size: 0.9rem;
+}
+
+.pi-note {
+    margin-top: 10px !important;
+}
+
+/* Skill chips */
+.pi-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pi-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 11px;
+    border: 1px solid rgba(125, 165, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(91, 125, 255, 0.10);
+    color: #dce7ff;
+    font-size: 0.8rem;
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.pi-chip:hover {
+    background: rgba(91, 125, 255, 0.23);
+    border-color: rgba(125, 165, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+/* Project and contact cards */
+.pi-project,
+.pi-contact-card {
+    padding: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.035);
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.pi-project:hover,
+.pi-contact-card:hover {
+    transform: translateY(-3px);
+    background: rgba(96, 125, 255, 0.08);
+    border-color: rgba(125, 165, 255, 0.48);
+}
+
+.pi-project h4,
+.pi-contact-card h4 {
+    margin-top: 0;
+    color: #ffffff;
+}
+
+.pi-project-tech {
+    margin: 12px 0 !important;
+    color: #b7c1d4;
+    font-size: 0.88rem;
+}
+
+/* Clickable buttons */
+.pi-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.pi-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    margin-top: 12px;
+    border: 1px solid rgba(140, 170, 255, 0.45);
+    border-radius: 9px;
+    background: linear-gradient(
+        135deg,
+        rgba(85, 110, 255, 0.95),
+        rgba(113, 79, 220, 0.95)
+    );
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+.pi-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(91, 110, 255, 0.25);
+    filter: brightness(1.12);
+}
+
+.pi-button:focus-visible {
+    outline: 2px solid #c5d5ff;
+    outline-offset: 3px;
+}
+
+.pi-button-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+/* Lists */
+.pi-list {
+    padding-left: 22px;
+    margin: 0;
+}
+
+.pi-list li {
+    margin: 8px 0;
+    padding-left: 3px;
+    line-height: 1.6;
+}
+
+/* Education timeline */
+.pi-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pi-step {
+    position: relative;
+    padding: 0 0 4px 20px;
+    border-left: 1px solid rgba(125, 165, 255, 0.4);
+}
+
+.pi-dot {
+    position: absolute;
+    left: -5px;
+    top: 4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #91aaff;
+    box-shadow: 0 0 12px rgba(112, 142, 255, 0.5);
+}
+
+/* Award cards */
+.pi-award {
+    padding: 14px;
+    margin: 8px 0;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.pi-award strong {
+    color: #e4ebff;
+    line-height: 1.6;
+}
+
+.pi-award p {
+    margin-top: 6px;
+    color: #b7c1d4;
+}
+
+/* Small screens */
+@media (max-width: 600px) {
+    .pi-section {
+        gap: 12px;
+    }
+
+    .pi-project,
+    .pi-contact-card {
+        padding: 13px;
+    }
+
+    .pi-action-row {
+        flex-direction: column;
+    }
+
+    .pi-action-row .pi-button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .pi-button {
+        text-align: center;
+    }
+}
