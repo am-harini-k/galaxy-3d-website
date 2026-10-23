@@ -1641,7 +1641,7 @@ const planetInfo = {
 
                 <h4>Frameworks and libraries</h4>
                 <div class="pi-chips">
-                    <span class="pi-chip">Numpy</span>
+                
                     <span class="pi-chip">3.js</span>
                     <span class="pi-chip">Next.js</span>
                 </div>
@@ -1654,9 +1654,9 @@ const planetInfo = {
 
                 <h4>Technologies</h4>
                 <div class="pi-chips">
-                    <span class="pi-chip">Machine Learning Fundamentals</span>
+                    <span class="pi-chip">Machine Learning </span>
                     <span class="pi-chip">Retrieval-Augmented Generation (RAG)</span>
-                    <span class="pi-chip">Deep learning</span>
+                    <span class="pi-chip">Deep learning Fundamentals</span>
                 </div>
 
                 <h4>Soft Skills</h4>
