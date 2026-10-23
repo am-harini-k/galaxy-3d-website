@@ -26,6 +26,30 @@ let isPanelVisible = false
 const canvas =
     document.querySelector('canvas.webgl')
 
+const touchWordsHint = document.createElement('div')
+touchWordsHint.textContent = '✦ TOUCH THE WORDS TO EXPLORE ✦'
+touchWordsHint.setAttribute('aria-hidden', 'true')
+touchWordsHint.style.cssText = `
+    position: fixed;
+    top: clamp(1.25rem, 5vw, 3rem);
+    left: 50%;
+    z-index: 1;
+    max-width: calc(100vw - 2rem);
+    padding: 0 1rem;
+    color: #fff0c2;
+    font: 600 clamp(0.5rem, 2vw, 0.82rem) Georgia, serif;
+    letter-spacing: clamp(0.08em, 0.45vw, 0.28em);
+    line-height: 1.4;
+    text-align: center;
+    text-shadow: 0 0 14px rgba(59, 130, 246, 0.5);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+    transform: translateX(-50%);
+`
+document.body.appendChild(touchWordsHint)
+
 window.addEventListener('pageshow', (event) =>
 {
     if(event.persisted)
@@ -290,6 +314,7 @@ const openGalaxy = () =>
 
     openingStarted = true
     instructionActive = false
+    touchWordsHint.style.opacity = '0.55'
 
     galaxyOpeningStart = openingClock.getElapsedTime()
     textAnimationStart = galaxyOpeningStart
@@ -328,26 +353,50 @@ const handlePointer = (event) =>
 
     // Only allow currently visible text objects
     // to receive clicks.
-    const visibleClickableObjects =
-        clickableObjects.filter(
-            (textMesh) =>
-                textMesh.visible &&
-                textMesh.scale.x > 0.05
-        )
+    
+const visibleClickableObjects =
+    clickableObjects.filter(
+        (textMesh) =>
+            textMesh.visible &&
+            textMesh.scale.x > 0.05
+    )
 
+// Check whether the user touches the actual text
+const textHit =
+    raycaster.intersectObjects(
+        visibleClickableObjects,
+        false
+    )[0]
 
-    const textHit =
-        raycaster.intersectObjects(
-            visibleClickableObjects,
-            false
-        )[0]
+if(textHit)
+{
+    textHit.object.userData.onClick()
+    return
+}
 
+// If the actual text was not touched,
+// check a larger invisible area around each word.
+for(const textMesh of visibleClickableObjects)
+{
+    const hitArea = new THREE.Box3()
+        .setFromObject(textMesh)
 
-    if(textHit)
+    // Expand the clickable area in every direction.
+    hitArea.expandByScalar(0.5)
+
+    const ray = raycaster.ray
+    const distance = ray.intersectBox(
+        hitArea,
+        new THREE.Vector3()
+    )
+
+    if(distance)
     {
-        textHit.object.userData.onClick()
+        textMesh.userData.onClick()
         return
     }
+}
+
 
 
     // If the galaxy has not been opened yet,
