@@ -445,6 +445,30 @@ parameters.randomnessPower = 2
 parameters.insideColor = '#fffaff'
 parameters.outsideColor = '#a78bfa'
 
+// Keep the original settings for Reset
+const defaultGalaxyParameters = { ...parameters }
+
+// Restore colors saved in this browser tab
+const savedGalaxyColors = sessionStorage.getItem('galaxySavedColors')
+
+if (savedGalaxyColors)
+{
+    try
+    {
+        const savedColors = JSON.parse(savedGalaxyColors)
+
+        if (savedColors.insideColor)
+            parameters.insideColor = savedColors.insideColor
+
+        if (savedColors.outsideColor)
+            parameters.outsideColor = savedColors.outsideColor
+    }
+    catch (error)
+    {
+        sessionStorage.removeItem('galaxySavedColors')
+    }
+}
+
 
 /**
  * =========================
@@ -1075,6 +1099,39 @@ const createGalaxyControlPanel = () =>
             border-top: 1px solid rgba(255,240,194,.12);
         }
 
+        .galaxy-panel-color-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .galaxy-panel-color-action {
+            min-width: 88px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,240,194,.3);
+            border-radius: 999px;
+            background: rgba(255,255,255,.06);
+            color: #fff0c2;
+            font: inherit;
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background .25s ease, border-color .25s ease, transform .25s ease;
+        }
+
+        .galaxy-panel-color-action:hover {
+            background: rgba(59,130,246,.25);
+            border-color: rgba(158,200,255,.7);
+            transform: translateY(-1px);
+        }
+
+        .galaxy-panel-color-action:focus-visible {
+            outline: 2px solid #9ec8ff;
+            outline-offset: 2px;
+        }
+
         .galaxy-color {
             display: flex;
             flex-direction: column;
@@ -1144,7 +1201,6 @@ const createGalaxyControlPanel = () =>
     const colorConfigs = [
         { key: 'insideColor', label: 'Core' },
         { key: 'outsideColor', label: 'Outer' }
-        
     ]
 
     const slidersHtml = sliderConfigs.map((cfg) => `
@@ -1174,10 +1230,13 @@ const createGalaxyControlPanel = () =>
         </div>
         <div class="galaxy-panel-header">
             <h3>Shape The Galaxy</h3>
-            <p>Drag the controls to reshape stars, spin and color in real time</p>
+            <p>Drag the controls to reshape stars and spin in real time, then save color changes</p>
         </div>
         <div class="galaxy-panel-sliders">${slidersHtml}</div>
         <div class="galaxy-panel-colors">${colorsHtml}</div>
+        <div class="galaxy-panel-color-actions">
+            <button class="galaxy-panel-color-action galaxy-panel-color-reset" type="button">Reset</button>
+        </div>
     `
 
     document.body.appendChild(panel)
@@ -1203,18 +1262,84 @@ const createGalaxyControlPanel = () =>
     {
         input.addEventListener('input', () =>
         {
+            input.setAttribute('aria-label', `${input.dataset.key} color (unsaved)`)
+        })
+    })
+
+    
+    // Update the galaxy whenever the user changes a color
+    panel.querySelectorAll('input[type="color"]').forEach((input) =>
+    {
+        input.addEventListener('input', () =>
+        {
             const key = input.dataset.key
+
+            // Apply the selected color immediately
             parameters[key] = input.value
 
-            if(key === 'backgroundColor')
-            {
-                scene.background.set(parameters.backgroundColor)
-            }
-            else
-            {
-                generateGalaxy()
-            }
+            generateGalaxy()
+
+            input.setAttribute(
+                'aria-label',
+                `${key} color (unsaved)`
+            )
         })
+    })
+
+    // SAVE: preserve selected colors during this tab's session
+    
+    // RESET: restore the original galaxy settings
+    panel.querySelector('.galaxy-panel-color-reset')
+        .addEventListener('click', () =>
+        {
+            Object.assign(parameters, defaultGalaxyParameters)
+
+            // Remove the saved colors from this tab's session
+            sessionStorage.removeItem('galaxySavedColors')
+
+            // Restore all slider positions and displayed values
+            panel.querySelectorAll('input[type="range"]')
+                .forEach((input) =>
+                {
+                    const key = input.dataset.key
+
+                    input.value = parameters[key]
+
+                    panel.querySelector(
+                        `[data-value-for="${key}"]`
+                    ).textContent = input.value
+                })
+
+            // Restore both color pickers
+            colorConfigs.forEach((cfg) =>
+            {
+                panel.querySelector(
+                    `input[data-key="${cfg.key}"]`
+                ).value = parameters[cfg.key]
+            })
+
+            // Rebuild the original galaxy
+            generateGalaxy()
+        })
+
+
+    panel.querySelector('.galaxy-panel-color-reset').addEventListener('click', () =>
+    {
+        Object.assign(parameters, defaultGalaxyParameters)
+
+        panel.querySelectorAll('input[type="range"]').forEach((input) =>
+        {
+            const key = input.dataset.key
+            input.value = parameters[key]
+            panel.querySelector(`[data-value-for="${key}"]`).textContent = input.value
+        })
+
+        colorConfigs.forEach((cfg) =>
+        {
+            panel.querySelector(`input[data-key="${cfg.key}"]`).value = parameters[cfg.key]
+        })
+
+        generateGalaxy()
     })
 
     panel.querySelector('.galaxy-panel-close').addEventListener('click', () =>
