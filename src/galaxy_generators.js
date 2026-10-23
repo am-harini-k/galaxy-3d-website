@@ -959,6 +959,8 @@ const createGalaxyControlPanel = () =>
             border-radius: 3px;
             background: linear-gradient(90deg, #fff0c2, #3b82f6);
             opacity: .55;
+            cursor: ns-resize;
+            touch-action: none;
         }
 
         .galaxy-panel-close {
@@ -1111,6 +1113,7 @@ const createGalaxyControlPanel = () =>
         @media (max-width: 640px) {
             .galaxy-panel {
                 padding: 14px 18px 22px;
+                height: min(78vh, 640px);
                 max-height: 78vh;
             }
 
@@ -1166,7 +1169,7 @@ const createGalaxyControlPanel = () =>
 
     panel.innerHTML = `
         <div class="galaxy-panel-handle">
-            <span class="galaxy-panel-grip"></span>
+            <span class="galaxy-panel-grip" role="slider" aria-label="Resize galaxy controls" aria-valuemin="120" title="Drag to resize"></span>
             <button class="galaxy-panel-close" type="button" aria-label="Close galaxy controls">&times;</button>
         </div>
         <div class="galaxy-panel-header">
@@ -1219,10 +1222,63 @@ const createGalaxyControlPanel = () =>
         toggleGalaxyGUI()
     })
 
-    panel.querySelector('.galaxy-panel-handle').addEventListener('click', (event) =>
+    const panelHandle = panel.querySelector('.galaxy-panel-handle')
+    const panelGrip = panel.querySelector('.galaxy-panel-grip')
+    let dragStartY = 0
+    let dragStartHeight = 0
+    let didDragPanel = false
+
+    panelGrip.addEventListener('pointerdown', (event) =>
+    {
+        dragStartY = event.clientY
+        dragStartHeight = panel.getBoundingClientRect().height
+        didDragPanel = false
+        panelGrip.setAttribute('aria-valuemax', `${Math.round(window.innerHeight * 0.9)}`)
+        panelGrip.setAttribute('aria-valuenow', `${Math.round(dragStartHeight)}`)
+        panelGrip.setPointerCapture(event.pointerId)
+        event.preventDefault()
+    })
+
+    panelGrip.addEventListener('pointermove', (event) =>
+    {
+        if(!panelGrip.hasPointerCapture(event.pointerId))
+        {
+            return
+        }
+
+        const height = Math.min(
+            window.innerHeight * 0.9,
+            Math.max(120, dragStartHeight + dragStartY - event.clientY)
+        )
+
+        if(Math.abs(event.clientY - dragStartY) > 3)
+        {
+            didDragPanel = true
+        }
+
+        panel.style.height = `${height}px`
+        panel.style.maxHeight = '90vh'
+        panelGrip.setAttribute('aria-valuenow', `${Math.round(height)}`)
+    })
+
+    panelGrip.addEventListener('pointerup', (event) =>
+    {
+        if(panelGrip.hasPointerCapture(event.pointerId))
+        {
+            panelGrip.releasePointerCapture(event.pointerId)
+        }
+    })
+
+    panelHandle.addEventListener('click', (event) =>
     {
         if(event.target.closest('.galaxy-panel-close'))
         {
+            return
+        }
+
+        if(didDragPanel)
+        {
+            didDragPanel = false
             return
         }
 
