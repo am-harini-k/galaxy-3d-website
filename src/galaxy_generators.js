@@ -81,13 +81,7 @@ const toggleGalaxyGUI = () =>
 let portfolioTravelStarted = false
 let portfolioTravelStart = 0
 
-window.addEventListener('pageshow', (event) =>
-{
-    if(event.persisted)
-    {
-        window.location.reload()
-    }
-})
+
 
 const beginPortfolioTravel = () =>
 {
@@ -1804,9 +1798,10 @@ const tick = () =>
 
     // When travel is complete
     if(travelProgress >= 1)
-    {
-        window.location.href = './solar.html'
-    }
+{
+    portfolioTravelStarted = false
+    window.location.href = './solar.html'
+}
 }
 
 

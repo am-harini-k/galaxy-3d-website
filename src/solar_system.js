@@ -1212,28 +1212,35 @@ const createSun = () => {
 
         shader.uniforms.uTime = { value: 0 }
 
-        shader.vertexShader = shader.vertexShader
-            .replace(
-                '#include <common>',
-                `#include <common>
-                varying vec3 vSunNormal;
-                varying vec3 vSunViewPosition;`
-            )
-            .replace(
-                '#include <begin_vertex>',
-                `#include <begin_vertex>
-                vSunNormal = normalize( normalMatrix * normal );
-                vSunViewPosition = -( modelViewMatrix * vec4( position, 1.0 ) ).xyz;`
-            )
+        
+shader.vertexShader = shader.vertexShader
+    .replace(
+        '#include <common>',
+        `#include <common>
+        varying vec3 vSunNormal;
+        varying vec3 vSunViewPosition;
+        varying vec2 vUv;`
+    )
+
+            
+.replace(
+    '#include <begin_vertex>',
+    `#include <begin_vertex>
+    vUv = uv;
+    vSunNormal = normalize( normalMatrix * normal );
+    vSunViewPosition = -( modelViewMatrix * vec4( position, 1.0 ) ).xyz;`
+)
+
 
         shader.fragmentShader = shader.fragmentShader
-            .replace(
-                '#include <common>',
-                `#include <common>
-                varying vec3 vSunNormal;
-                varying vec3 vSunViewPosition;
-                uniform float uTime;`
-            )
+    .replace(
+        '#include <common>',
+        `#include <common>
+        varying vec3 vSunNormal;
+        varying vec3 vSunViewPosition;
+        varying vec2 vUv;
+        uniform float uTime;`
+    )
             .replace(
                 '#include <map_fragment>',
                 `#include <map_fragment>
