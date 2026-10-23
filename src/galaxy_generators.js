@@ -26,6 +26,14 @@ let isPanelVisible = false
 const canvas =
     document.querySelector('canvas.webgl')
 
+window.addEventListener('pageshow', (event) =>
+{
+    if(event.persisted)
+    {
+        window.location.reload()
+    }
+})
+
 const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 const fontLoader = new FontLoader()
@@ -1899,6 +1907,7 @@ const tick = () =>
         tick
     )
 }
+
 
 
 tick()
