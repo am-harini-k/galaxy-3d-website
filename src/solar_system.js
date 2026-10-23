@@ -813,14 +813,14 @@ document.head.appendChild(welcomeStyle)
 
 const welcomeScreen = document.createElement('section')
 welcomeScreen.className = 'solar-welcome'
-welcomeScreen.setAttribute('aria-label', 'Welcome to Harini K interactive portfolio')
+welcomeScreen.setAttribute('aria-label', 'Welcome to Harini K portfolio')
 welcomeScreen.innerHTML = `
     <div class="solar-welcome-content">
         <div class="solar-welcome-eyebrow">Explore our</div>
         <h1 class="solar-welcome-title">Solar System</h1>
         <div class="solar-welcome-rule"></div>
         <p class="solar-welcome-copy">
-            Welcome to my interactive portfolio. Travel through the planets
+            Welcome to my portfolio. Travel through the planets
             to discover my profile, skills, projects, and experience.
         </p>
         <button class="solar-welcome-button" type="button">
