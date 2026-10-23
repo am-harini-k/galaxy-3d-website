@@ -1113,8 +1113,8 @@ const createGalaxyControlPanel = () =>
         @media (max-width: 640px) {
             .galaxy-panel {
                 padding: 14px 18px 22px;
-                height: min(78vh, 640px);
-                max-height: 78vh;
+                height: min(40vh, 360px);
+                max-height: 90vh;
             }
 
             .galaxy-panel-header h3 {
