@@ -80,6 +80,15 @@ const toggleGalaxyGUI = () =>
 
 let portfolioTravelStarted = false
 let portfolioTravelStart = 0
+
+window.addEventListener('pageshow', (event) =>
+{
+    if(event.persisted)
+    {
+        window.location.reload()
+    }
+})
+
 const beginPortfolioTravel = () =>
 {
     if(portfolioTravelStarted)
