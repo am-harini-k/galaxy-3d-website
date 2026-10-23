@@ -1596,21 +1596,21 @@ const bloomPass =
          * Glow strength
          */
 
-        0.25,
+        1.7,
 
 
         /**
          * Glow radius
          */
 
-        0.35,
+        0.4,
 
 
         /**
          * Brightness threshold
          */
 
-        0.65
+        0.85
     )
 
 
